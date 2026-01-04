@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Course Web Advisor</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #eaf2ff;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+h1, h2 {
+    text-align: center;
+    color: #003399;
+}
+
+.hidden {
+    display: none;
+}
+
+input, select, textarea, button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #aaa;
+}
+
+button {
+    background: #4169E1;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #27408b;
+}
+
+.card {
+    background: #f4f7ff;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎓 Student Course Web Advisor</h1>
+
+<!-- ================= LOGIN PAGE ================= -->
+<div id="loginPage">
+
+<h2>Login</h2>
+
+<select id="loginRole">
+    <option value="student">Student</option>
+    <option value="advisor">Course Advisor</option>
+</select>
+
+<input type="text" id="loginUsername" placeholder="Username">
+<input type="password" id="loginPassword" placeholder="Password">
+
+<button onclick="login()">Login</button>
+<p style="text-align:center">No account? <b>Student signup below</b></p>
+
+<hr>
+
+<h2>Student Sign Up</h2>
+<input type="text" id="signupUsername" placeholder="Username">
+<input type="password" id="signupPassword" placeholder="Password">
+<button onclick="signup()">Sign Up</button>
+
+</div>
+
+<!-- ================= STUDENT DASHBOARD ================= -->
+<div id="studentDashboard" class="hidden">
+
+<h2>👨‍🎓 Student Dashboard</h2>
+
+<select id="stream" onchange="autoFillSubjects()">
+    <option value="">Select A/L Stream</option>
+    <option>Physical</option>
+    <option>Biological</option>
+    <option>Commerce</option>
+    <option>Arts</option>
+    <option>Technology</option>
+</select>
+
+<input id="sub1" placeholder="Subject 1">
+<input id="sub2" placeholder="Subject 2">
+<input id="sub3" placeholder="Subject 3">
+
+<select id="r1"><option>A</option><option>B</option><option>C</option><option>W</option></select>
+<select id="r2"><option>A</option><option>B</option><option>C</option><option>W</option></select>
+<select id="r3"><option>A</option><option>B</option><option>C</option><option>W</option></select>
+
+<input type="number" id="gpa" placeholder="Current GPA (2nd year & above)" step="0.01">
+
+<select id="interest">
+    <option>Technology</option>
+    <option>Management</option>
+    <option>Medical</option>
+    <option>Teaching</option>
+    <option>Design</option>
+</select>
+
+<button onclick="getRecommendation()">Get Recommendation</button>
+
+<div class="card" id="studentOutput">Recommendation will appear here</div>
+
+<button onclick="logout()">Logout</button>
+
+</div>
+
+<!-- ================= ADVISOR DASHBOARD ================= -->
+<div id="advisorDashboard" class="hidden">
+
+<h2>👨‍🏫 Course Advisor Dashboard</h2>
+
+<div id="studentList"></div>
+
+<textarea id="advisorFeedback" placeholder="Write feedback here"></textarea>
+<button onclick="saveFeedback()">Save Feedback</button>
+
+<button onclick="logout()">Logout</button>
+
+</div>
+
+</div>
+
+<script>
+/* ---------------- DATA ---------------- */
+const advisorAccount = { username: "advisor", password: "admin123" };
+let currentStudent = null;
+let selectedStudent = null;
+
+/* ---------------- AUTH ---------------- */
+function signup() {
+    const u = signupUsername.value;
+    const p = signupPassword.value;
+
+    if (!u || !p) return alert("Fill all fields");
+
+    localStorage.setItem(u, JSON.stringify({ password: p, profile: {} }));
+    alert("Signup successful!");
+}
+
+function login() {
+    const role = loginRole.value;
+    const u = loginUsername.value;
+    const p = loginPassword.value;
+
+    if (role === "advisor") {
+        if (u === advisorAccount.username && p === advisorAccount.password) {
+            showAdvisorDashboard();
+        } else alert("Invalid advisor login");
+        return;
+    }
+
+    const data = JSON.parse(localStorage.getItem(u));
+    if (!data || data.password !== p) return alert("Invalid login");
+
+    currentStudent = u;
+    showStudentDashboard();
+}
+
+function logout() {
+    location.reload();
+}
+
+/* ---------------- STUDENT ---------------- */
+function showStudentDashboard() {
+    loginPage.classList.add("hidden");
+    studentDashboard.classList.remove("hidden");
+}
+
+function autoFillSubjects() {
+    const s = stream.value;
+    const subjects = {
+        Physical: ["Physics", "Chemistry", "Combined Maths"],
+        Biological: ["Biology", "Chemistry", "Physics"],
+        Commerce: ["Accounting", "Economics", "Business"],
+        Arts: ["History", "Political Science", "Logic"],
+        Technology: ["Engineering Tech", "ICT", "Science"]
+    };
+
+    if (subjects[s]) {
+        [sub1.value, sub2.value, sub3.value] = subjects[s];
+    }
+}
+
+function getRecommendation() {
+    const rec =
+        interest.value === "Technology" ? "Computer Science, IT" :
+        interest.value === "Medical" ? "Medicine, Nursing" :
+        interest.value === "Management" ? "Business Management" :
+        interest.value === "Teaching" ? "Education Degree" :
+        "Design & Multimedia";
+
+    studentOutput.innerHTML = `<b>${rec}</b>`;
+
+    const profile = {
+        stream: stream.value,
+        subjects: [sub1.value, sub2.value, sub3.value],
+        gpa: gpa.value,
+        interest: interest.value,
+        recommendation: rec,
+        feedback: ""
+    };
+
+    const data = JSON.parse(localStorage.getItem(currentStudent));
+    data.profile = profile;
+    localStorage.setItem(currentStudent, JSON.stringify(data));
+}
+
+/* ---------------- ADVISOR ---------------- */
+function showAdvisorDashboard() {
+    loginPage.classList.add("hidden");
+    advisorDashboard.classList.remove("hidden");
+    loadStudents();
+}
+
+function loadStudents() {
+    studentList.innerHTML = "<h3>Students</h3>";
+    Object.keys(localStorage).forEach(k => {
+        const d = JSON.parse(localStorage.getItem(k));
+        if (d.profile && d.profile.stream) {
+            const div = document.createElement("div");
+            div.className = "card";
+            div.innerHTML = `<b>${k}</b><br>${d.profile.recommendation}`;
+            div.onclick = () => selectStudent(k);
+            studentList.appendChild(div);
+        }
+    });
+}
+
+function selectStudent(name) {
+    selectedStudent = name;
+    const d = JSON.parse(localStorage.getItem(name));
+    advisorFeedback.value = d.profile.feedback || "";
+}
+
+function saveFeedback() {
+    if (!selectedStudent) return alert("Select a student");
+
+    const d = JSON.parse(localStorage.getItem(selectedStudent));
+    d.profile.feedback = advisorFeedback.value;
+    localStorage.setItem(selectedStudent, JSON.stringify(d));
+
+    alert("Feedback saved");
+}
+</script>
+
+</body>
+</html>
