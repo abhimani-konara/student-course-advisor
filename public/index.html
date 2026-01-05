@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Course Web Advisor</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #eaf2ff;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+h1, h2 {
+    text-align: center;
+    color: #003399;
+}
+
+.hidden {
+    display: none;
+}
+
+input, select, textarea, button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #aaa;
+}
+
+button {
+    background: #4169E1;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #27408b;
+}
+
+.card {
+    background: #f4f7ff;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.card:hover {
+    background: #e8f0ff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎓 Student Course Web Advisor</h1>
+
+<!-- ================= LOGIN PAGE ================= -->
+<div id="loginPage">
+
+<h2>Login</h2>
+
+<select id="loginRole">
+    <option value="student">Student</option>
+    <option value="advisor">Course Advisor</option>
+</select>
+
+<input type="text" id="loginUsername" placeholder="Username">
+<input type="password" id="loginPassword" placeholder="Password">
+
+<button onclick="login()">Login</button>
+<p style="text-align:center">No account? <b>Student signup below</b></p>
+
+<hr>
+
+<h2>Student Sign Up</h2>
+<input type="text" id="signupUsername" placeholder="Username">
+<input type="password" id="signupPassword" placeholder="Password">
+<button onclick="signup()">Sign Up</button>
+
+</div>
+
+<!-- ================= STUDENT DASHBOARD ================= -->
+<div id="studentDashboard" class="hidden">
+
+<h2>👨‍🎓 Student Dashboard</h2>
+
+<select id="stream" onchange="autoFillSubjects()">
+    <option value="">Select A/L Stream</option>
+    <option>Physical</option>
+    <option>Biological</option>
+    <option>Commerce</option>
+    <option>Arts</option>
+    <option>Technology</option>
+</select>
+
+<input id="sub1" placeholder="Subject 1">
+<input id="sub2" placeholder="Subject 2">
+<input id="sub3" placeholder="Subject 3">
+
+<select id="r1"><option>A</option><option>B</option><option>C</option><option>W</option></select>
+<select id="r2"><option>A</option><option>B</option><option>C</option><option>W</option></select>
+<select id="r3"><option>A</option><option>B</option><option>C</option><option>W</option></select>
+
+<input type="number" id="gpa" placeholder="Current GPA (2nd year & above)" step="0.01">
+
+<select id="interest">
+    <option value="">Select Interest</option>
+    <option>Technology</option>
+    <option>Management</option>
+    <option>Medical</option>
+    <option>Teaching</option>
+    <option>Design</option>
+    <option>Engineering</option>
+    <option>Science</option>
+    <option>Data Science</option>
+</select>
+
+<button onclick="getRecommendation()">Get Recommendation</button>
+
+<div class="card" id="studentOutput">Recommendation will appear here</div>
+
+<button onclick="logout()">Logout</button>
+
+</div>
+
+<!-- ================= ADVISOR DASHBOARD ================= -->
+<div id="advisorDashboard" class="hidden">
+
+<h2>👨‍🏫 Course Advisor Dashboard</h2>
+
+<div id="studentList"></div>
+
+<textarea id="advisorFeedback" placeholder="Write feedback here"></textarea>
+<button onclick="saveFeedback()">Save Feedback</button>
+
+<button onclick="logout()">Logout</button>
+
+</div>
+
+</div>
+
+<script>
+// ===================================================================
+// Frontend JavaScript - Connects to Backend API
+// ===================================================================
+// Developer: Abhimani Konara (KIC-DCSAI-251-F-028)
+// Integration: Frontend ↔ Node.js ↔ Prolog ↔ SQLite
+// Group 7 - NIBM Final Project
+// ===================================================================
+
+const API_URL = 'http://localhost:3000/api';
+let currentStudent = null;
+let selectedStudent = null;
+
+// Authentication Functions
+function signup() {
+    const u = document.getElementById('signupUsername').value;
+    const p = document.getElementById('signupPassword').value;
+
+    if (!u || !p) return alert("Fill all fields");
+
+    fetch(`${API_URL}/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: u, password: p })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert("Signup successful! Please login.");
+            document.getElementById('signupUsername').value = '';
+            document.getElementById('signupPassword').value = '';
+        } else {
+            alert(data.message || "Signup failed");
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Error during signup. Make sure server is running!");
+    });
+}
+
+function login() {
+    const role = document.getElementById('loginRole').value;
+    const u = document.getElementById('loginUsername').value;
+    const p = document.getElementById('loginPassword').value;
+
+    if (!u || !p) return alert("Fill all fields");
+
+    fetch(`${API_URL}/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: u, password: p, role: role })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            currentStudent = u;
+            if (role === 'advisor') {
+                showAdvisorDashboard();
+            } else {
+                showStudentDashboard();
+            }
+        } else {
+            alert(data.message || "Invalid login");
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Error during login. Make sure server is running!");
+    });
+}
+
+function logout() {
+    location.reload();
+}
+
+// Student Functions
+function showStudentDashboard() {
+    document.getElementById('loginPage').classList.add("hidden");
+    document.getElementById('studentDashboard').classList.remove("hidden");
+}
+
+function autoFillSubjects() {
+    const s = document.getElementById('stream').value;
+    const subjects = {
+        Physical: ["Physics", "Chemistry", "Combined Maths"],
+        Biological: ["Biology", "Chemistry", "Physics"],
+        Commerce: ["Accounting", "Economics", "Business"],
+        Arts: ["History", "Political Science", "Logic"],
+        Technology: ["Engineering Tech", "ICT", "Science"]
+    };
+
+    if (subjects[s]) {
+        document.getElementById('sub1').value = subjects[s][0];
+        document.getElementById('sub2').value = subjects[s][1];
+        document.getElementById('sub3').value = subjects[s][2];
+    }
+}
+
+function getRecommendation() {
+    const stream = document.getElementById('stream').value;
+    const interest = document.getElementById('interest').value;
+    const gpa = parseFloat(document.getElementById('gpa').value) || 0;
+
+    if (!stream || !interest) {
+        alert("Please select stream and interest");
+        return;
+    }
+
+    // Call backend API with Prolog integration
+    fetch(`${API_URL}/recommend`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            username: currentStudent,
+            stream: stream,
+            interest: interest,
+            gpa: gpa,
+            subjects: [
+                document.getElementById('sub1').value,
+                document.getElementById('sub2').value,
+                document.getElementById('sub3').value
+            ],
+            results: [
+                document.getElementById('r1').value,
+                document.getElementById('r2').value,
+                document.getElementById('r3').value
+            ]
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('studentOutput').innerHTML = 
+                `<b>✅ Recommended Course:</b><br><br><h3 style="color: #4169E1;">${data.recommendation}</h3>`;
+        } else {
+            alert("Error getting recommendation");
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Error connecting to server. Make sure backend server is running on port 3000!");
+    });
+}
+
+// Advisor Functions
+function showAdvisorDashboard() {
+    document.getElementById('loginPage').classList.add("hidden");
+    document.getElementById('advisorDashboard').classList.remove("hidden");
+    loadStudents();
+}
+
+function loadStudents() {
+    fetch(`${API_URL}/students`)
+    .then(res => res.json())
+    .then(data => {
+        const list = document.getElementById('studentList');
+        list.innerHTML = "<h3>Students</h3>";
+        
+        if (data.students && data.students.length > 0) {
+            data.students.forEach(student => {
+                const div = document.createElement("div");
+                div.className = "card";
+                div.innerHTML = `
+                    <b>${student.username}</b><br>
+                    Stream: ${student.stream || 'Not set'}<br>
+                    Interest: ${student.interest || 'Not set'}<br>
+                    Recommendation: ${student.recommendation || 'Not generated yet'}
+                `;
+                div.onclick = () => selectStudent(student.username);
+                list.appendChild(div);
+            });
+        } else {
+            list.innerHTML += '<p>No students have registered yet.</p>';
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Error loading students");
+    });
+}
+
+function selectStudent(username) {
+    selectedStudent = username;
+    
+    // Highlight selected card
+    document.querySelectorAll('.card').forEach(card => {
+        card.style.border = '';
+    });
+    event.target.closest('.card').style.border = '3px solid #4169E1';
+    
+    // Load feedback
+    fetch(`${API_URL}/feedback/${username}`)
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('advisorFeedback').value = data.feedback || '';
+    });
+}
+
+function saveFeedback() {
+    if (!selectedStudent) return alert("Please select a student first");
+    
+    const feedback = document.getElementById('advisorFeedback').value;
+    
+    fetch(`${API_URL}/feedback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            student: selectedStudent,
+            advisor: 'advisor',
+            feedback: feedback
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert("✅ Feedback saved successfully!");
+        } else {
+            alert("Error saving feedback");
+        }
+    });
+}
+</script>
+
+</body>
+</html>
