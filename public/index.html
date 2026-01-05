@@ -65,6 +65,61 @@ button:hover {
 .card:hover {
     background: #e8f0ff;
 }
+
+footer {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px 20px;
+    margin-top: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.footer-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.footer-section h4 {
+    margin-bottom: 12px;
+    color: #fff;
+    font-size: 1.1rem;
+    border-bottom: 2px solid rgba(255,255,255,0.3);
+    padding-bottom: 8px;
+}
+
+.footer-section p {
+    margin: 8px 0;
+    opacity: 0.95;
+    line-height: 1.6;
+}
+
+.footer-divider {
+    border-top: 1px solid rgba(255,255,255,0.3);
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+.tech-stack {
+    opacity: 0.9;
+    margin-bottom: 15px;
+    line-height: 1.8;
+}
+
+.copyright {
+    opacity: 0.85;
+    font-size: 0.9rem;
+    margin-top: 15px;
+}
 </style>
 </head>
 
@@ -158,6 +213,59 @@ button:hover {
 </div>
 
 </div>
+
+<!-- ================= PROFESSIONAL FOOTER ================= -->
+<footer>
+    <div class="footer-content">
+        <h3 style="margin-bottom: 25px; font-size: 1.5rem;">🎓 Student Course Advisor Web Application</h3>
+        
+        <div class="footer-grid">
+            <div class="footer-section">
+                <h4>🏛️ Academic Institution</h4>
+                <p><strong>National Institute of Business Management</strong></p>
+                <p>School of Computing and Engineering</p>
+                <p>Diploma in Computer Science with AI</p>
+                <p>Program Code: DCSAI-25.1-F</p>
+            </div>
+            
+            <div class="footer-section">
+                <h4>👥 Development Team - Group 7</h4>
+                <p><strong>Pasindu Bandara</strong> (KIC-DCSAI-251-F-030)</p>
+                <p><strong>Abhimani Konara</strong> (KIC-DCSAI-251-F-028)</p>
+                <p><strong>Chethani Thakshila</strong> (KIC-DCSAI-251-F-048)</p>
+                <p><strong>Isurika Bandara</strong> (KIC-DCSAI-251-F-029)</p>
+            </div>
+            
+            <div class="footer-section">
+                <h4>🏢 Partner Institution</h4>
+                <p><strong>KIC - Kandy Innovation Centre</strong></p>
+                <p>Final Year Project - 2026</p>
+                <p>Project Type: AI-Powered Web Application</p>
+                <p>Supervisor Approved</p>
+            </div>
+        </div>
+        
+        <div class="footer-divider">
+            <h4 style="margin-bottom: 15px;">⚡ Technology Stack</h4>
+            <p class="tech-stack">
+                <strong>Frontend:</strong> HTML5, CSS3, JavaScript ES6<br>
+                <strong>Backend:</strong> Node.js v24.12 + Express.js<br>
+                <strong>AI Engine:</strong> SWI-Prolog v9.2.9 (Symbolic AI)<br>
+                <strong>Database:</strong> SQLite 3<br>
+                <strong>Development Tools:</strong> Visual Studio Code, Git & GitHub<br>
+                <strong>Architecture:</strong> Full-Stack AI Integration
+            </p>
+        </div>
+        
+        <div class="footer-divider">
+            <p class="copyright">
+                © 2026 Student Course Advisor System | All Rights Reserved<br>
+                Developed with 💜 by Group 7 | NIBM & KIC Collaboration<br>
+                <strong>Powered by Artificial Intelligence & Prolog Logic</strong>
+            </p>
+        </div>
+    </div>
+</footer>
 
 <script>
 // ===================================================================
