@@ -15,7 +15,7 @@ const { spawn } = require('child_process');
 const sqlite3 = require('sqlite3').verbose();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Database connection
 const dbPath = path.join(__dirname, 'backend', 'database', 'students.db');
