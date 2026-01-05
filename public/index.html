@@ -2,154 +2,303 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Student Course Web Advisor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Course Web Advisor - NIBM Final Project</title>
 
 <style>
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background: #eaf2ff;
-    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
     padding: 20px;
 }
 
-.container {
-    max-width: 1000px;
-    margin: auto;
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+.main-container {
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-h1, h2 {
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    margin-bottom: 20px;
+}
+
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 15px 15px 0 0;
+    text-align: center;
+    margin: -30px -30px 30px -30px;
+}
+
+.header h1 {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+}
+
+.header p {
+    font-size: 1.1rem;
+    opacity: 0.95;
+}
+
+h2 {
     text-align: center;
     color: #003399;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
-input, select, textarea, button {
+input, select, textarea {
     width: 100%;
-    padding: 10px;
-    margin-top: 8px;
-    margin-bottom: 15px;
-    border-radius: 6px;
-    border: 1px solid #aaa;
+    padding: 12px 15px;
+    margin: 8px 0 15px 0;
+    border-radius: 8px;
+    border: 2px solid #e0e0e0;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-top: 15px;
+    margin-bottom: 5px;
 }
 
 button {
-    background: #4169E1;
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    font-size: 16px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 button:hover {
-    background: #27408b;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+
+button.secondary {
+    background: #6c757d;
+    margin-top: 15px;
+}
+
+button.secondary:hover {
+    background: #5a6268;
 }
 
 .card {
-    background: #f4f7ff;
-    padding: 15px;
+    background: #f8f9fa;
+    padding: 20px;
     border-radius: 10px;
-    margin-top: 15px;
+    margin-top: 20px;
+    border-left: 4px solid #667eea;
+}
+
+.student-card {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
 }
 
-.card:hover {
-    background: #e8f0ff;
+.student-card:hover {
+    border-color: #667eea;
+    transform: translateX(5px);
+    background: #e7f3ff;
 }
 
+.student-card.selected {
+    background: #e7f3ff;
+    border-color: #667eea;
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.results-grid select {
+    margin: 0;
+}
+
+.link-text {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.link-text a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.link-text a:hover {
+    text-decoration: underline;
+}
+
+hr {
+    margin: 30px 0;
+    border: none;
+    border-top: 2px solid #e0e0e0;
+}
+
+/* Footer Styles */
 footer {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    padding: 30px 20px;
-    margin-top: 40px;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    padding: 40px 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    margin-top: 30px;
 }
 
 .footer-content {
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
+}
+
+.footer-title {
     text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
 
 .footer-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 25px;
-    margin-bottom: 25px;
-    text-align: left;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-bottom: 30px;
 }
 
 .footer-section h4 {
-    margin-bottom: 12px;
-    color: #fff;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
     border-bottom: 2px solid rgba(255,255,255,0.3);
-    padding-bottom: 8px;
 }
 
 .footer-section p {
-    margin: 8px 0;
-    opacity: 0.95;
+    margin: 10px 0;
     line-height: 1.6;
+    opacity: 0.95;
 }
 
 .footer-divider {
     border-top: 1px solid rgba(255,255,255,0.3);
-    padding-top: 20px;
-    margin-top: 20px;
+    padding-top: 25px;
+    margin-top: 25px;
 }
 
 .tech-stack {
-    opacity: 0.9;
-    margin-bottom: 15px;
-    line-height: 1.8;
+    line-height: 2;
+    opacity: 0.95;
 }
 
 .copyright {
-    opacity: 0.85;
-    font-size: 0.9rem;
-    margin-top: 15px;
+    text-align: center;
+    padding-top: 20px;
+    margin-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.3);
+    opacity: 0.9;
+    font-size: 0.95rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 1.6rem;
+    }
+    
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .results-grid {
+        grid-template-columns: 1fr;
+    }
 }
 </style>
 </head>
 
 <body>
 
+<div class="main-container">
+
 <div class="container">
 
-<h1>🎓 Student Course Web Advisor</h1>
+<div class="header">
+    <h1>🎓 Student Course Web Advisor</h1>
+    <p>AI-Powered Course Recommendation System</p>
+</div>
 
 <!-- ================= LOGIN PAGE ================= -->
 <div id="loginPage">
 
-<h2>Login</h2>
+<h2>Welcome Back!</h2>
 
+<label>Select Role:</label>
 <select id="loginRole">
     <option value="student">Student</option>
     <option value="advisor">Course Advisor</option>
 </select>
 
-<input type="text" id="loginUsername" placeholder="Username">
-<input type="password" id="loginPassword" placeholder="Password">
+<label>Username:</label>
+<input type="text" id="loginUsername" placeholder="Enter your username">
+
+<label>Password:</label>
+<input type="password" id="loginPassword" placeholder="Enter your password">
 
 <button onclick="login()">Login</button>
-<p style="text-align:center">No account? <b>Student signup below</b></p>
+
+<div class="link-text">
+    <p>Don't have an account? <a href="#" onclick="showSignup(); return false;">Sign up here</a></p>
+</div>
 
 <hr>
 
-<h2>Student Sign Up</h2>
-<input type="text" id="signupUsername" placeholder="Username">
-<input type="password" id="signupPassword" placeholder="Password">
+<h2>New Student Registration</h2>
+
+<label>Choose Username:</label>
+<input type="text" id="signupUsername" placeholder="Create a username">
+
+<label>Choose Password:</label>
+<input type="password" id="signupPassword" placeholder="Create a password">
+
 <button onclick="signup()">Sign Up</button>
 
 </div>
@@ -159,42 +308,73 @@ footer {
 
 <h2>👨‍🎓 Student Dashboard</h2>
 
+<label>A/L Stream:</label>
 <select id="stream" onchange="autoFillSubjects()">
-    <option value="">Select A/L Stream</option>
-    <option>Physical</option>
-    <option>Biological</option>
-    <option>Commerce</option>
-    <option>Arts</option>
-    <option>Technology</option>
+    <option value="">-- Select Your Stream --</option>
+    <option value="Physical">Physical Science</option>
+    <option value="Biological">Biological Science</option>
+    <option value="Commerce">Commerce</option>
+    <option value="Arts">Arts</option>
+    <option value="Technology">Technology</option>
 </select>
 
-<input id="sub1" placeholder="Subject 1">
-<input id="sub2" placeholder="Subject 2">
-<input id="sub3" placeholder="Subject 3">
+<label>Subject 1:</label>
+<input type="text" id="sub1" placeholder="e.g., Physics">
 
-<select id="r1"><option>A</option><option>B</option><option>C</option><option>W</option></select>
-<select id="r2"><option>A</option><option>B</option><option>C</option><option>W</option></select>
-<select id="r3"><option>A</option><option>B</option><option>C</option><option>W</option></select>
+<label>Subject 2:</label>
+<input type="text" id="sub2" placeholder="e.g., Chemistry">
 
-<input type="number" id="gpa" placeholder="Current GPA (2nd year & above)" step="0.01">
+<label>Subject 3:</label>
+<input type="text" id="sub3" placeholder="e.g., Combined Mathematics">
 
+<label>A/L Results:</label>
+<div class="results-grid">
+    <select id="r1">
+        <option value="A">A - Excellent</option>
+        <option value="B">B - Very Good</option>
+        <option value="C">C - Good</option>
+        <option value="S">S - Satisfactory</option>
+        <option value="W">W - Weak</option>
+    </select>
+    <select id="r2">
+        <option value="A">A - Excellent</option>
+        <option value="B">B - Very Good</option>
+        <option value="C">C - Good</option>
+        <option value="S">S - Satisfactory</option>
+        <option value="W">W - Weak</option>
+    </select>
+    <select id="r3">
+        <option value="A">A - Excellent</option>
+        <option value="B">B - Very Good</option>
+        <option value="C">C - Good</option>
+        <option value="S">S - Satisfactory</option>
+        <option value="W">W - Weak</option>
+    </select>
+</div>
+
+<label>Current GPA (Optional - for 2nd year & above):</label>
+<input type="number" id="gpa" placeholder="e.g., 3.2" step="0.01" min="0" max="4.0">
+
+<label>Area of Interest:</label>
 <select id="interest">
-    <option value="">Select Interest</option>
-    <option>Technology</option>
-    <option>Management</option>
-    <option>Medical</option>
-    <option>Teaching</option>
-    <option>Design</option>
-    <option>Engineering</option>
-    <option>Science</option>
-    <option>Data Science</option>
+    <option value="">-- Select Your Interest --</option>
+    <option value="Technology">Technology & Computing</option>
+    <option value="Engineering">Engineering</option>
+    <option value="Medical">Medical & Healthcare</option>
+    <option value="Management">Business & Management</option>
+    <option value="Teaching">Education & Teaching</option>
+    <option value="Design">Design & Multimedia</option>
+    <option value="Science">Science & Research</option>
+    <option value="Data Science">Data Science & Analytics</option>
 </select>
 
-<button onclick="getRecommendation()">Get Recommendation</button>
+<button onclick="getRecommendation()">Get AI Recommendation</button>
 
-<div class="card" id="studentOutput">Recommendation will appear here</div>
+<div id="studentOutput" class="card" style="display: none;">
+    <p>Your recommendation will appear here...</p>
+</div>
 
-<button onclick="logout()">Logout</button>
+<button class="secondary" onclick="logout()">Logout</button>
 
 </div>
 
@@ -205,10 +385,11 @@ footer {
 
 <div id="studentList"></div>
 
-<textarea id="advisorFeedback" placeholder="Write feedback here"></textarea>
-<button onclick="saveFeedback()">Save Feedback</button>
+<label>Advisor Feedback:</label>
+<textarea id="advisorFeedback" rows="5" placeholder="Write your feedback for the selected student..."></textarea>
 
-<button onclick="logout()">Logout</button>
+<button onclick="saveFeedback()">Save Feedback</button>
+<button class="secondary" onclick="logout()">Logout</button>
 
 </div>
 
@@ -217,14 +398,14 @@ footer {
 <!-- ================= PROFESSIONAL FOOTER ================= -->
 <footer>
     <div class="footer-content">
-        <h3 style="margin-bottom: 25px; font-size: 1.5rem;">🎓 Student Course Advisor Web Application</h3>
+        <h3 class="footer-title">🎓 Student Course Advisor Web Application</h3>
         
         <div class="footer-grid">
             <div class="footer-section">
                 <h4>🏛️ Academic Institution</h4>
-                <p><strong>National Institute of Business Management</strong></p>
+                <p><strong>National Institute of Business Management (NIBM)</strong></p>
                 <p>School of Computing and Engineering</p>
-                <p>Diploma in Computer Science with AI</p>
+                <p>Diploma in Computer Science with Artificial Intelligence</p>
                 <p>Program Code: DCSAI-25.1-F</p>
             </div>
             
@@ -246,123 +427,152 @@ footer {
         </div>
         
         <div class="footer-divider">
-            <h4 style="margin-bottom: 15px;">⚡ Technology Stack</h4>
-            <p class="tech-stack">
+            <h4 style="text-align: center; margin-bottom: 20px;">⚡ Technology Stack</h4>
+            <p class="tech-stack" style="text-align: center;">
                 <strong>Frontend:</strong> HTML5, CSS3, JavaScript ES6<br>
                 <strong>Backend:</strong> Node.js v24.12 + Express.js<br>
-                <strong>AI Engine:</strong> SWI-Prolog v9.2.9 (Symbolic AI)<br>
+                <strong>AI Engine:</strong> SWI-Prolog v9.2.9 (Symbolic AI & Rule-Based Reasoning)<br>
                 <strong>Database:</strong> SQLite 3<br>
                 <strong>Development Tools:</strong> Visual Studio Code, Git & GitHub<br>
-                <strong>Architecture:</strong> Full-Stack AI Integration
+                <strong>Architecture:</strong> Full-Stack AI Integration with RESTful API
             </p>
         </div>
         
-        <div class="footer-divider">
-            <p class="copyright">
+        <div class="copyright">
+            <p>
                 © 2026 Student Course Advisor System | All Rights Reserved<br>
                 Developed with 💜 by Group 7 | NIBM & KIC Collaboration<br>
-                <strong>Powered by Artificial Intelligence & Prolog Logic</strong>
+                <strong>Powered by Artificial Intelligence & Prolog Logic Engine</strong>
             </p>
         </div>
     </div>
 </footer>
 
+</div>
+
 <script>
 // ===================================================================
-// Frontend JavaScript - Connects to Backend API
+// Student Course Advisor - Frontend Application
 // ===================================================================
 // Developer: Abhimani Konara (KIC-DCSAI-251-F-028)
-// Integration: Frontend ↔ Node.js ↔ Prolog ↔ SQLite
-// Group 7 - NIBM Final Project
+// Role: IDE Setup, Version Control, Full-Stack Integration
+// Integration: Frontend ↔ Node.js Express ↔ SWI-Prolog ↔ SQLite
+// Group 7 - NIBM Final Project - January 2026
 // ===================================================================
 
 const API_URL = 'http://localhost:3000/api';
 let currentStudent = null;
 let selectedStudent = null;
 
-// Authentication Functions
-function signup() {
-    const u = document.getElementById('signupUsername').value;
-    const p = document.getElementById('signupPassword').value;
+// ==================== NAVIGATION FUNCTIONS ====================
 
-    if (!u || !p) return alert("Fill all fields");
+function showSignup() {
+    // Scroll to signup section smoothly
+    document.getElementById('signupUsername').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('signupUsername').focus();
+}
+
+// ==================== AUTHENTICATION FUNCTIONS ====================
+
+function signup() {
+    const username = document.getElementById('signupUsername').value.trim();
+    const password = document.getElementById('signupPassword').value;
+
+    if (!username || !password) {
+        alert("⚠️ Please fill in all fields");
+        return;
+    }
+
+    if (password.length < 4) {
+        alert("⚠️ Password must be at least 4 characters long");
+        return;
+    }
 
     fetch(`${API_URL}/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: u, password: p })
+        body: JSON.stringify({ username: username, password: password })
     })
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            alert("Signup successful! Please login.");
+            alert("✅ Account created successfully! Please login with your credentials.");
             document.getElementById('signupUsername').value = '';
             document.getElementById('signupPassword').value = '';
+            document.getElementById('loginUsername').value = username;
+            document.getElementById('loginUsername').scrollIntoView({ behavior: 'smooth' });
         } else {
-            alert(data.message || "Signup failed");
+            alert("❌ " + (data.message || "Signup failed"));
         }
     })
     .catch(err => {
         console.error(err);
-        alert("Error during signup. Make sure server is running!");
+        alert("❌ Error during signup. Make sure the server is running!");
     });
 }
 
 function login() {
     const role = document.getElementById('loginRole').value;
-    const u = document.getElementById('loginUsername').value;
-    const p = document.getElementById('loginPassword').value;
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value;
 
-    if (!u || !p) return alert("Fill all fields");
+    if (!username || !password) {
+        alert("⚠️ Please fill in all fields");
+        return;
+    }
 
     fetch(`${API_URL}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: u, password: p, role: role })
+        body: JSON.stringify({ username: username, password: password, role: role })
     })
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            currentStudent = u;
+            currentStudent = username;
             if (role === 'advisor') {
                 showAdvisorDashboard();
             } else {
                 showStudentDashboard();
             }
         } else {
-            alert(data.message || "Invalid login");
+            alert("❌ " + (data.message || "Invalid credentials"));
         }
     })
     .catch(err => {
         console.error(err);
-        alert("Error during login. Make sure server is running!");
+        alert("❌ Error during login. Make sure the server is running!");
     });
 }
 
 function logout() {
-    location.reload();
+    if (confirm("Are you sure you want to logout?")) {
+        location.reload();
+    }
 }
 
-// Student Functions
+// ==================== STUDENT FUNCTIONS ====================
+
 function showStudentDashboard() {
     document.getElementById('loginPage').classList.add("hidden");
     document.getElementById('studentDashboard').classList.remove("hidden");
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function autoFillSubjects() {
-    const s = document.getElementById('stream').value;
-    const subjects = {
-        Physical: ["Physics", "Chemistry", "Combined Maths"],
-        Biological: ["Biology", "Chemistry", "Physics"],
-        Commerce: ["Accounting", "Economics", "Business"],
-        Arts: ["History", "Political Science", "Logic"],
-        Technology: ["Engineering Tech", "ICT", "Science"]
+    const stream = document.getElementById('stream').value;
+    const subjectMap = {
+        'Physical': ["Physics", "Chemistry", "Combined Mathematics"],
+        'Biological': ["Biology", "Chemistry", "Physics"],
+        'Commerce': ["Accounting", "Economics", "Business Studies"],
+        'Arts': ["History", "Political Science", "Logic & Scientific Method"],
+        'Technology': ["Engineering Technology", "ICT", "Science for Technology"]
     };
 
-    if (subjects[s]) {
-        document.getElementById('sub1').value = subjects[s][0];
-        document.getElementById('sub2').value = subjects[s][1];
-        document.getElementById('sub3').value = subjects[s][2];
+    if (subjectMap[stream]) {
+        document.getElementById('sub1').value = subjectMap[stream][0];
+        document.getElementById('sub2').value = subjectMap[stream][1];
+        document.getElementById('sub3').value = subjectMap[stream][2];
     }
 }
 
@@ -371,51 +581,86 @@ function getRecommendation() {
     const interest = document.getElementById('interest').value;
     const gpa = parseFloat(document.getElementById('gpa').value) || 0;
 
-    if (!stream || !interest) {
-        alert("Please select stream and interest");
+    if (!stream) {
+        alert("⚠️ Please select your A/L stream");
         return;
     }
 
-    // Call backend API with Prolog integration
+    if (!interest) {
+        alert("⚠️ Please select your area of interest");
+        return;
+    }
+
+    // Show loading state
+    const outputDiv = document.getElementById('studentOutput');
+    outputDiv.innerHTML = '<p style="text-align: center; padding: 20px;">⏳ Analyzing your profile with AI...</p>';
+    outputDiv.style.display = 'block';
+
+    // Gather all form data
+    const requestData = {
+        username: currentStudent,
+        stream: stream,
+        interest: interest,
+        gpa: gpa,
+        subjects: [
+            document.getElementById('sub1').value,
+            document.getElementById('sub2').value,
+            document.getElementById('sub3').value
+        ],
+        results: [
+            document.getElementById('r1').value,
+            document.getElementById('r2').value,
+            document.getElementById('r3').value
+        ]
+    };
+
+    // Call backend API
     fetch(`${API_URL}/recommend`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            username: currentStudent,
-            stream: stream,
-            interest: interest,
-            gpa: gpa,
-            subjects: [
-                document.getElementById('sub1').value,
-                document.getElementById('sub2').value,
-                document.getElementById('sub3').value
-            ],
-            results: [
-                document.getElementById('r1').value,
-                document.getElementById('r2').value,
-                document.getElementById('r3').value
-            ]
-        })
+        body: JSON.stringify(requestData)
     })
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            document.getElementById('studentOutput').innerHTML = 
-                `<b>✅ Recommended Course:</b><br><br><h3 style="color: #4169E1;">${data.recommendation}</h3>`;
+            outputDiv.innerHTML = `
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 12px; text-align: center;">
+                    <h3 style="margin: 0 0 20px 0; font-size: 1.3rem; opacity: 0.95;">✅ AI Recommendation Result</h3>
+                    <h2 style="margin: 0; font-size: 2.2rem; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+                        ${data.recommendation}
+                    </h2>
+                    <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.3);">
+                        <p style="margin: 5px 0; opacity: 0.95;">📚 Stream: <strong>${stream}</strong></p>
+                        <p style="margin: 5px 0; opacity: 0.95;">💡 Interest: <strong>${interest}</strong></p>
+                        <p style="margin: 5px 0; opacity: 0.95;">📊 GPA: <strong>${gpa || 'N/A'}</strong></p>
+                    </div>
+                    <p style="margin-top: 20px; font-size: 0.95rem; opacity: 0.9;">
+                        This recommendation is generated using AI-powered Prolog logic engine
+                    </p>
+                </div>
+            `;
+            outputDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
         } else {
-            alert("Error getting recommendation");
+            outputDiv.innerHTML = '<p style="color: #dc3545; text-align: center; padding: 20px;">❌ Unable to generate recommendation. Please try again.</p>';
         }
     })
     .catch(err => {
-        console.error(err);
-        alert("Error connecting to server. Make sure backend server is running on port 3000!");
+        console.error('Error:', err);
+        outputDiv.innerHTML = `
+            <p style="color: #dc3545; text-align: center; padding: 20px;">
+                ❌ Error connecting to server.<br>
+                Please make sure the backend server is running on port 3000!
+            </p>
+        `;
     });
 }
 
-// Advisor Functions
+// ==================== ADVISOR FUNCTIONS ====================
+
 function showAdvisorDashboard() {
     document.getElementById('loginPage').classList.add("hidden");
     document.getElementById('advisorDashboard').classList.remove("hidden");
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     loadStudents();
 }
 
@@ -423,53 +668,69 @@ function loadStudents() {
     fetch(`${API_URL}/students`)
     .then(res => res.json())
     .then(data => {
-        const list = document.getElementById('studentList');
-        list.innerHTML = "<h3>Students</h3>";
+        const listDiv = document.getElementById('studentList');
+        listDiv.innerHTML = "<h3 style='margin-bottom: 20px;'>📋 Registered Students</h3>";
         
         if (data.students && data.students.length > 0) {
             data.students.forEach(student => {
-                const div = document.createElement("div");
-                div.className = "card";
-                div.innerHTML = `
-                    <b>${student.username}</b><br>
-                    Stream: ${student.stream || 'Not set'}<br>
-                    Interest: ${student.interest || 'Not set'}<br>
-                    Recommendation: ${student.recommendation || 'Not generated yet'}
+                const card = document.createElement("div");
+                card.className = "student-card";
+                card.innerHTML = `
+                    <strong style="font-size: 1.1rem; color: #667eea;">👤 ${student.username}</strong><br>
+                    <span style="color: #666;">Stream:</span> ${student.stream || 'Not set'}<br>
+                    <span style="color: #666;">Interest:</span> ${student.interest || 'Not set'}<br>
+                    <span style="color: #666;">GPA:</span> ${student.gpa || 'N/A'}<br>
+                    <span style="color: #666;">Recommendation:</span> <strong>${student.recommendation || 'Not generated'}</strong>
                 `;
-                div.onclick = () => selectStudent(student.username);
-                list.appendChild(div);
+                card.onclick = () => selectStudentForFeedback(student.username, card);
+                listDiv.appendChild(card);
             });
         } else {
-            list.innerHTML += '<p>No students have registered yet.</p>';
+            listDiv.innerHTML += '<p style="text-align: center; color: #666; padding: 20px;">No students have registered yet.</p>';
         }
     })
     .catch(err => {
         console.error(err);
-        alert("Error loading students");
+        alert("❌ Error loading students");
     });
 }
 
-function selectStudent(username) {
+function selectStudentForFeedback(username, cardElement) {
     selectedStudent = username;
     
-    // Highlight selected card
-    document.querySelectorAll('.card').forEach(card => {
-        card.style.border = '';
+    // Remove selected class from all cards
+    document.querySelectorAll('.student-card').forEach(card => {
+        card.classList.remove('selected');
     });
-    event.target.closest('.card').style.border = '3px solid #4169E1';
     
-    // Load feedback
+    // Add selected class to clicked card
+    cardElement.classList.add('selected');
+    
+    // Load existing feedback
     fetch(`${API_URL}/feedback/${username}`)
     .then(res => res.json())
     .then(data => {
         document.getElementById('advisorFeedback').value = data.feedback || '';
+        document.getElementById('advisorFeedback').focus();
+    })
+    .catch(err => {
+        console.error(err);
+        document.getElementById('advisorFeedback').value = '';
     });
 }
 
 function saveFeedback() {
-    if (!selectedStudent) return alert("Please select a student first");
+    if (!selectedStudent) {
+        alert("⚠️ Please select a student first");
+        return;
+    }
     
-    const feedback = document.getElementById('advisorFeedback').value;
+    const feedback = document.getElementById('advisorFeedback').value.trim();
+    
+    if (!feedback) {
+        alert("⚠️ Please write some feedback");
+        return;
+    }
     
     fetch(`${API_URL}/feedback`, {
         method: 'POST',
@@ -483,12 +744,24 @@ function saveFeedback() {
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            alert("✅ Feedback saved successfully!");
+            alert(`✅ Feedback saved successfully for ${selectedStudent}!`);
         } else {
-            alert("Error saving feedback");
+            alert("❌ Error saving feedback");
         }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("❌ Error saving feedback");
     });
 }
+
+// ==================== INITIALIZATION ====================
+
+// Focus on username field when page loads
+window.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('loginUsername').focus();
+});
+
 </script>
 
 </body>
